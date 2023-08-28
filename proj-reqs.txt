@@ -1,0 +1,19 @@
+Requirements
+------------
+
+- two screens (start and questions)
+- pull 5 questions from the OTDB API
+- tally correct answers after "check answers" clicked
+- style and polished
+
+API Link: https://opentdb.com/api_config.php
+
+Hints
+-----
+- HTML entity -> decode it using he or html-entities
+
+- Create a new array with all answers. Randomly insert the correct_answer into the array with the incorrect_answers. Use Google/ChatGPT for help on how to shuffle items in an array at random or how to insert an item randomly into an array.
+
+- Limit answer choice to 1 and style selected answer: either--
+    (1) track the selected answer index inside each question object
+    (2) use an HTML form w/radio inputs using the same name attribute to automatically only allow one selection (and check Google on how to style a radio input to look like a button)
