@@ -45,9 +45,9 @@ function App() {
 		}));
 	};
 
-	const checkAnswer = () => {
-		// map thru the selectedChoices and compare it to the correct answers per answerId
-	};
+	// const checkAnswer = () => {
+	// 	// map thru the selectedChoices and compare it to the correct answers per answerId
+	// };
 
 	return (
 		<>
