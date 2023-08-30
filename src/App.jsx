@@ -7,6 +7,8 @@ function App() {
 	const [start, setStart] = useState(false);
 	const [allQuestions, setAllQuestions] = useState([]);
 	const [selectedChoices, setSelectedChoices] = useState({});
+	const [answerStatus, setAnswerStatus] = useState({});
+	const [check, setCheck] = useState(false);
 
 	useEffect(() => {
 		// Fisher-Yates Algorithm
@@ -38,16 +40,24 @@ function App() {
 		setSelectedChoices((prevChoices) => ({
 			...prevChoices,
 			[questionId]: {
-				answerId: questionId,
 				selectedAnswer: choice,
 				isSelected: true
 			}
 		}));
 	};
 
-	// const checkAnswer = () => {
-	// 	// map thru the selectedChoices and compare it to the correct answers per answerId
-	// };
+	const checkAnswer = () => {
+		const updatedStatus = {};
+		allQuestions.forEach((item) => {
+			const selectedChoice = selectedChoices[item.questionId].selectedAnswer;
+			const isCorrect = selectedChoice === item.correct_answer;
+			updatedStatus[item.questionId] = isCorrect ? true : false;
+			setAnswerStatus(updatedStatus);
+		});
+		setCheck(!check);
+	};
+
+	const btnChild = check ? "Play Again" : "Check Answer";
 
 	return (
 		<>
@@ -61,9 +71,12 @@ function App() {
 								choices={item.choices}
 								onClick={(choice) => handleChoice(item.questionId, choice)}
 								isSelected={selectedChoices[item.questionId]}
+								correctAnswer={item.correct_answer}
+								answerStatus={answerStatus[item.questionId]}
+								isChecked={check}
 							/>
 						))}
-						<Button onClick={() => checkAnswer}>Check Answer</Button>
+						<Button onClick={checkAnswer}>{btnChild}</Button>
 					</QuestionContainer>
 				</>
 			) : (
