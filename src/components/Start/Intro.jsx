@@ -1,7 +1,7 @@
 import Button from "../Button/Button";
-import styles from "./Start.module.css"; // Import the styles
+import styles from "./Intro.module.css"; // Import the styles
 
-function Start({ onClick }) {
+function Intro({ onClick }) {
 	return (
 		<main className="align-center relative flex h-screen w-full flex-col justify-center overflow-hidden text-center text-delft">
 			<h1 className="text-3xl font-bold sm:text-6xl">Quizzical</h1>
@@ -21,4 +21,4 @@ function Start({ onClick }) {
 	);
 }
 
-export default Start;
+export default Intro;

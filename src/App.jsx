@@ -1,4 +1,4 @@
-import { Start, Questions, QuestionContainer, Button, Return } from "./components";
+import { Intro, Questions, QuestionContainer, Button, Return } from "./components";
 import { useState, useEffect } from "react";
 import { decode } from "html-entities";
 import { nanoid } from "nanoid";
@@ -130,7 +130,7 @@ const App = () => {
 					</QuestionContainer>
 				</>
 			) : (
-				<Start onClick={() => setStart(!start)} />
+				<Intro onClick={() => setStart(!start)} />
 			)}
 		</>
 	);
