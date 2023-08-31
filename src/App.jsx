@@ -2,13 +2,16 @@ import { Start, Questions, QuestionContainer, Button } from "./components";
 import { useState, useEffect } from "react";
 import { decode } from "html-entities";
 import { nanoid } from "nanoid";
+import axios from "axios";
 
-function App() {
+const App = () => {
 	const [start, setStart] = useState(false);
 	const [allQuestions, setAllQuestions] = useState([]);
 	const [selectedChoices, setSelectedChoices] = useState({});
 	const [answerStatus, setAnswerStatus] = useState({});
 	const [check, setCheck] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [score, setScore] = useState("");
 
 	useEffect(() => {
 		// Fisher-Yates Algorithm
@@ -23,16 +26,20 @@ function App() {
 
 		if (allQuestions.length <= 0) {
 			async function getQuestions() {
-				const res = await fetch("https://opentdb.com/api.php?amount=5");
-				const data = await res.json();
-				setAllQuestions(
-					data.results.map((item) => ({
-						...item,
-						questionId: nanoid(),
-						question: decode(item.question),
-						choices: shuffleChoices([item.correct_answer, ...item.incorrect_answers])
-					}))
-				);
+				try {
+					const response = await axios.get("https://opentdb.com/api.php?amount=5");
+					const data = response.data;
+					setAllQuestions(
+						data.results.map((item) => ({
+							...item,
+							questionId: nanoid(),
+							question: decode(item.question),
+							choices: shuffleChoices([item.correct_answer, ...item.incorrect_answers])
+						}))
+					);
+				} catch (error) {
+					console.error("Error fetching questions:", error);
+				}
 			}
 			getQuestions();
 		}
@@ -87,7 +94,6 @@ function App() {
 								correctAnswer={item.correct_answer}
 								answerStatus={answerStatus[item.questionId]}
 								isChecked={check}
-								isDisabled={check}
 							/>
 						))}
 
@@ -101,6 +107,6 @@ function App() {
 			)}
 		</>
 	);
-}
+};
 
 export default App;
