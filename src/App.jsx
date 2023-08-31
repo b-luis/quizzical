@@ -21,20 +21,22 @@ function App() {
 			return decode(shuffled);
 		}
 
-		async function getQuestions() {
-			const res = await fetch("https://opentdb.com/api.php?amount=5");
-			const data = await res.json();
-			setAllQuestions(
-				data.results.map((item) => ({
-					...item,
-					questionId: nanoid(),
-					question: decode(item.question),
-					choices: shuffleChoices([item.correct_answer, ...item.incorrect_answers])
-				}))
-			);
+		if (allQuestions.length <= 0) {
+			async function getQuestions() {
+				const res = await fetch("https://opentdb.com/api.php?amount=5");
+				const data = await res.json();
+				setAllQuestions(
+					data.results.map((item) => ({
+						...item,
+						questionId: nanoid(),
+						question: decode(item.question),
+						choices: shuffleChoices([item.correct_answer, ...item.incorrect_answers])
+					}))
+				);
+			}
+			getQuestions();
 		}
-		getQuestions();
-	}, []);
+	}, [allQuestions]);
 
 	const handleChoice = (questionId, choice) => {
 		setSelectedChoices((prevChoices) => ({
@@ -47,14 +49,25 @@ function App() {
 	};
 
 	const checkAnswer = () => {
+		// todo: display the scores
+		// todo: must disable the buttons - resolved
+
 		const updatedStatus = {};
 		allQuestions.forEach((item) => {
 			const selectedChoice = selectedChoices[item.questionId].selectedAnswer;
 			const isCorrect = selectedChoice === item.correct_answer;
-			updatedStatus[item.questionId] = isCorrect ? true : false;
+			updatedStatus[item.questionId] = isCorrect ? "correct" : "incorrect";
 			setAnswerStatus(updatedStatus);
 		});
-		setCheck(!check);
+		// state that watch out when the check answer button is clicked
+		setCheck((prevCheck) => !prevCheck);
+	};
+
+	const playAgain = () => {
+		setSelectedChoices({});
+		setAnswerStatus({});
+		setCheck(false);
+		setAllQuestions([]);
 	};
 
 	const btnChild = check ? "Play Again" : "Check Answer";
@@ -74,9 +87,13 @@ function App() {
 								correctAnswer={item.correct_answer}
 								answerStatus={answerStatus[item.questionId]}
 								isChecked={check}
+								isDisabled={check}
 							/>
 						))}
-						<Button onClick={checkAnswer}>{btnChild}</Button>
+
+						{(check && <Button onClick={playAgain}>Play Again</Button>) || (
+							<Button onClick={checkAnswer}>{btnChild}</Button>
+						)}
 					</QuestionContainer>
 				</>
 			) : (

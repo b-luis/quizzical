@@ -1,3 +1,19 @@
+function getButtonStyles(choice, isSelectedChoice, answerStatus, isChecked, correctAnswer) {
+	const defaultStyles =
+		"rounded-lg border-2 border-delft-dark px-5 hover:border-none hover:bg-delft-soft";
+	const selectedStyles = choice === isSelectedChoice ? "border-none bg-delft-soft" : "";
+	const correctStyles =
+		answerStatus === "correct" && choice === isSelectedChoice ? "border-none bg-green-300" : "";
+	const incorrectStyles =
+		answerStatus === "incorrect" && choice === isSelectedChoice ? "bg-red-300" : "";
+	const correctAnswerStyles =
+		choice !== isSelectedChoice && choice === correctAnswer && isChecked
+			? "border-none bg-green-300"
+			: "";
+
+	return `${defaultStyles} ${selectedStyles} ${correctStyles} ${incorrectStyles} ${correctAnswerStyles}`;
+}
+
 function Questions({
 	choices,
 	question,
@@ -8,8 +24,6 @@ function Questions({
 	correctAnswer
 }) {
 	const isSelectedChoice = isSelected?.selectedAnswer;
-	const isStatusCorrect = answerStatus || answerStatus === false;
-
 	return (
 		<>
 			<h2 className="pt-3 font-bold">{question}</h2>
@@ -17,14 +31,14 @@ function Questions({
 				{choices.map((choice, index) => (
 					<button
 						key={index}
-						className={`${choice === isSelectedChoice ? "border-none bg-delft-soft" : ""} 
-						${isStatusCorrect && choice === isSelectedChoice ? "bg-green-300" : ""}
-						${isStatusCorrect && choice === isSelectedChoice ? "bg-red-300" : ""} 
-						${
-							choice !== isSelectedChoice && choice === correctAnswer && isChecked
-								? "bg-green-200"
-								: ""
-						} rounded-lg border-2 border-delft-dark px-5 hover:bg-delft-soft`}
+						disabled={isChecked}
+						className={`${getButtonStyles(
+							choice,
+							isSelectedChoice,
+							answerStatus,
+							isChecked,
+							correctAnswer
+						)}`}
 						onClick={() => onClick(choice)}
 					>
 						{choice}
