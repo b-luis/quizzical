@@ -11,7 +11,7 @@ function getButtonStyles(choice, isSelectedChoice, answerStatus, isChecked, corr
 			? "border-none bg-green-300"
 			: "";
 
-	return `${defaultStyles} ${selectedStyles} ${correctStyles} ${incorrectStyles} ${correctAnswerStyles}`;
+	return `${defaultStyles} ${selectedStyles} ${correctStyles} ${incorrectStyles} ${correctAnswerStyles} }`;
 }
 
 function Questions({
@@ -26,7 +26,7 @@ function Questions({
 	const isSelectedChoice = isSelected?.selectedAnswer;
 	return (
 		<>
-			<h2 className="pt-3 font-bold">{question}</h2>
+			<h2 className="pt-3 font-bold ">{question}</h2>
 			<div className="mt-2 flex flex-wrap gap-2">
 				{choices.map((choice, index) => (
 					<button
